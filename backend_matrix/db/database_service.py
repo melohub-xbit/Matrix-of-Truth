@@ -1,6 +1,7 @@
 from firebase_admin import firestore
 from typing import Dict, List
 from firebase import db
+import datetime
 
 class DatabaseService:
     def __init__(self):
@@ -47,3 +48,65 @@ class DatabaseService:
     def get_all_user_broadcasts(self):
         user_docs = self.db.collection('user_broadcast').get()
         return [doc.to_dict() | {'id': doc.id} for doc in user_docs]
+
+    def get_game_pairs(self):
+        """Fetch all game pairs from database"""
+        collection = self.db.game_pairs
+        return list(collection.find({}))
+
+    def get_game_pair(self, pair_id):
+        """Fetch specific game pair"""
+        collection = self.db.game_pairs
+        return collection.find_one({'id': pair_id})
+
+    def save_game_vote(self, pair_id, choice, user_id):
+        """Save user vote"""
+        collection = self.db.game_votes
+        vote = {
+            'pair_id': pair_id,
+            'choice': choice,
+            'user_id': user_id,
+            'timestamp': datetime.utcnow()
+        }
+        collection.insert_one(vote)
+
+    def init_db(self):
+        """Initialize database with game data"""
+        # Create game_pairs collection if it doesn't exist
+        if 'game_pairs' not in self.db.collections():
+            game_pairs = self.db.collection('game_pairs')
+        else:
+            game_pairs = self.db.collection('game_pairs')
+
+        # Add initial game data
+        initial_pairs = [
+            {
+                "id": "pair-001",
+                "items": [
+                    {
+                        "id": "item-1",
+                        "type": "article",
+                        "title": "Local Weather Service Predicts Mild Summer",
+                        "url": "https://example.com/weather",
+                        "excerpt": "Meteorologists at the National Weather Service predict temperatures will remain mild...",
+                        "is_fake": False,
+                        "explanation": "This article comes from a verified weather service and includes specific, verifiable predictions."
+                    },
+                    {
+                        "id": "item-2",
+                        "type": "article",
+                        "title": "Scientists Discover Weather Control Device",
+                        "url": "https://weather-news.biz/control",
+                        "excerpt": "A revolutionary device that can control weather patterns has been invented...",
+                        "is_fake": True,
+                        "explanation": "This article makes extraordinary claims without evidence and uses a suspicious domain."
+                    }
+                ]
+            }
+        ]
+
+        # Add pairs to database
+        for pair in initial_pairs:
+            game_pairs.document(pair['id']).set(pair)
+
+        print("Database initialized with game pairs")

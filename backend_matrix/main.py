@@ -18,6 +18,7 @@ from routes.deepfake_audio import deepfake_audio_router
 from routes import video_broadcast
 from routes.nlp_analysis import nlp_router
 from routes.deepfake_detection import deepfake_router
+from routes.spot_game import bp as spot_game_bp
 
 news_fetcher = NewsFetcher()
 
@@ -96,6 +97,7 @@ app.include_router(deepfake_audio_router, tags=["Audio Detection"])
 app.include_router(video_broadcast.router)
 app.include_router(nlp_router, prefix="/nlp", tags=["NLP Analysis"])
 app.include_router(deepfake_router, prefix="/deepfake", tags=["Deepfake Detection"])
+app.register_blueprint(spot_game_bp)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the API"}

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DeepfakeDetection from "./pages/deepfake";
+import SpotTheFake from './components/SpotTheFake';
 import "./App.css";
 
 // Import your page components
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/deepfake" element={<DeepfakeDetection />} />
         <Route path="/about" element={<About />} />
+        <Route path="/spot-the-fake" element={<SpotTheFake />} />
       </Routes>
     </Router>
   );

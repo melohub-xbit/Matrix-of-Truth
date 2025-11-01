@@ -197,6 +197,7 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
+              <Link to="/spot-the-fake">Spot the Fake</Link>
               <Link
                 to="/about"
                 className="text-white text-xl py-4 border-b border-fuchsia-500/30 hover:text-fuchsia-400 transition-colors"
