@@ -54,18 +54,29 @@ class PredictionResponse(BaseModel):
     detailed_analysis: Dict[str, Any]
 
 # Initialize models on first request
-@nlp_router.on_event("startup")
-async def initialize_models():
+# Note: Removed deprecated @nlp_router.on_event("startup") decorator
+# Models will be initialized on first request instead
+def initialize_models_if_needed():
     global nlp, tokenizer, model, knowledge_graph
     
-    try:
-        # Load models
-        nlp, tokenizer, model = load_models()
-        knowledge_graph = load_knowledge_graph()
-        print("All NLP models loaded successfully")
-    except Exception as e:
-        print(f"Error loading NLP models: {str(e)}")
-        # We'll initialize on first request if this fails
+    if nlp is None or tokenizer is None or model is None or knowledge_graph is None:
+        try:
+            print("Loading NLP models...")
+            # Load models
+            nlp, tokenizer, model = load_models()
+            knowledge_graph = load_knowledge_graph()
+            print("All NLP models loaded successfully")
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Error loading NLP models: {error_msg}")
+            
+            # Check if it's the spaCy model issue
+            if "en_core_web_sm" in error_msg:
+                raise Exception(
+                    "spaCy model 'en_core_web_sm' not installed. "
+                    "Please run: python -m spacy download en_core_web_sm"
+                )
+            raise
 
 def generate_knowledge_graph_viz(text):
     global nlp, tokenizer, model
@@ -154,12 +165,10 @@ async def analyze_news(news_input: NewsInput):
         raise HTTPException(status_code=400, detail="News text cannot be empty")
     
     # Initialize models if not already done
-    if nlp is None or tokenizer is None or model is None or knowledge_graph is None:
-        try:
-            nlp, tokenizer, model = load_models()
-            knowledge_graph = load_knowledge_graph()
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Error loading models: {str(e)}")
+    try:
+        initialize_models_if_needed()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading models: {str(e)}")
     
     # Get predictions from all models
     ml_prediction, ml_confidence = predict_with_model(news_input.text, tokenizer, model)
@@ -216,20 +225,39 @@ async def analyze_news(news_input: NewsInput):
         "gemini_analysis": gemini_result
     }
     
+    # Ensure gemini_confidence is a string
+    gemini_confidence = gemini_result["gemini_analysis"]["confidence_score"]
+    if not isinstance(gemini_confidence, str):
+        gemini_confidence = str(gemini_confidence)
+    
     return {
         "ml_prediction": ml_prediction,
         "ml_confidence": ml_confidence,
         "kg_prediction": kg_prediction,
         "kg_confidence": kg_confidence,
         "gemini_prediction": gemini_result["gemini_analysis"]["predicted_classification"],
-        "gemini_confidence": gemini_result["gemini_analysis"]["confidence_score"],
+        "gemini_confidence": gemini_confidence,
         "detailed_analysis": detailed_analysis
     }
 
 @nlp_router.get("/health")
 async def health_check():
     global nlp, tokenizer, model, knowledge_graph
+    
+    models_loaded = nlp is not None and model is not None and tokenizer is not None and knowledge_graph is not None
+    
+    # Try to check if spacy model is available
+    spacy_available = False
+    try:
+        import spacy
+        spacy.load("en_core_web_sm")
+        spacy_available = True
+    except:
+        pass
+    
     return {
-        "status": "healthy", 
-        "models_loaded": nlp is not None and model is not None and tokenizer is not None and knowledge_graph is not None
+        "status": "healthy" if models_loaded else "models not loaded", 
+        "models_loaded": models_loaded,
+        "spacy_model_available": spacy_available,
+        "note": "Run 'python install_nlp_models.py' to install spaCy model if not available"
     }

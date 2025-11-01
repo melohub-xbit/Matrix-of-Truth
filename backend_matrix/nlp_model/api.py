@@ -25,7 +25,7 @@ from final import (
 )
 
 app = FastAPI(
-    title="Matrix NLP News Classifier API",
+    title="Nexus NLP News Classifier API",
     description="API for analyzing news text authenticity",
     version="1.0.0"
 )
@@ -305,4 +305,4 @@ async def health_check():
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Matrix NLP News Classifier API. Use /analyze endpoint to analyze news text."}
+    return {"message": "Welcome to Nexus NLP News Classifier API. Use /analyze endpoint to analyze news text."}

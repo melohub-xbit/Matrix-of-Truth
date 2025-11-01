@@ -17,7 +17,7 @@ async def video_broadcast_info():
     Get information about the video broadcasting service
     """
     return {
-        "service": "Video Broadcasting",
+        "service": "TruthTell Video Broadcasting",
         "status": "online",
         "endpoints": {
             "websocket": "/video/ws/{room}"

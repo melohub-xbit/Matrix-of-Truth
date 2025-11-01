@@ -14,7 +14,21 @@ dotenv.load_dotenv()
 
 def load_models():
     """Load all required ML models"""
-    nlp = spacy.load("en_core_web_sm")
+    try:
+        nlp = spacy.load("en_core_web_sm")
+    except OSError:
+        print("="*70)
+        print("ERROR: spaCy model 'en_core_web_sm' not found!")
+        print("="*70)
+        print("\nTo fix this, run the following command:")
+        print("  python -m spacy download en_core_web_sm")
+        print("\nOr install it directly:")
+        print("  pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0-py3-none-any.whl")
+        print("="*70)
+        raise Exception(
+            "spaCy model 'en_core_web_sm' not installed. "
+            "Run: python -m spacy download en_core_web_sm"
+        )
     
     # Use absolute path for the model
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,6 +39,9 @@ def load_models():
         # Try parent directory
         parent_dir = os.path.dirname(current_dir)
         model_path = os.path.join(parent_dir, "checkpoint-753")
+    
+    if not os.path.exists(model_path):
+        raise Exception(f"Model checkpoint not found at: {model_path}")
     
     tokenizer = DebertaV2Tokenizer.from_pretrained('microsoft/deberta-v3-small')
     model = AutoModelForSequenceClassification.from_pretrained(model_path)
@@ -89,7 +106,7 @@ class KnowledgeGraphBuilder:
 def setup_gemini():
     """Initialize Gemini model"""
     genai.configure(api_key=os.getenv("GEMINI_API"))
-    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    model = genai.GenerativeModel('models/gemini-2.5-flash')
     return model
 
 def predict_with_model(text, tokenizer, model):
@@ -142,7 +159,7 @@ def extract_entities(text, nlp):
         
 #         # Push to Hugging Face if requested
 #         if push_to_hf:
-#             repo_id = os.getenv("HF_REPO_ID", "HeheBoi0769/Matrix_NLP_model")
+#             repo_id = os.getenv("HF_REPO_ID", "HeheBoi0769/Nexus_NLP_model")
 #             push_to_huggingface(filepath, repo_id)
     
 #     return knowledge_graph
@@ -183,7 +200,7 @@ def update_knowledge_graph(text, is_real, knowledge_graph, nlp, save=True, push_
         # Push to Hugging Face only if explicitly requested
         if push_to_hf:
             from nlp_model.save_model import push_to_huggingface
-            repo_id = os.getenv("HF_REPO_ID", "HeheBoi0769/Matrix_NLP_model")
+            repo_id = os.getenv("HF_REPO_ID", "HeheBoi0769/Nexus_NLP_model")
             push_to_huggingface(filepath, repo_id)
     
     return knowledge_graph

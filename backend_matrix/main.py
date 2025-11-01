@@ -4,35 +4,9 @@ import uvicorn
 from routes.news_fetch import news_router
 from routes.user_inputs import input_router
 import nest_asyncio
-import asyncio
-import os
-
-# Set memory-efficient environment variables
-os.environ.setdefault('MPLCONFIGDIR', '/tmp/matplotlib')
-os.environ.setdefault('MPLBACKEND', 'Agg')
-os.environ.setdefault('OMP_NUM_THREADS', '1')
-os.environ.setdefault('MKL_NUM_THREADS', '1')
-os.environ.setdefault('OPENBLAS_NUM_THREADS', '1')
-os.environ.setdefault('NUMBA_CACHE_DIR', '/tmp/numba_cache')
-
-# Only apply nest_asyncio if we're not using uvloop
-try:
-    if not isinstance(asyncio.get_event_loop(), type(asyncio.new_event_loop())):
-        # We're using a different event loop (like uvloop), don't patch
-        pass
-    else:
-        nest_asyncio.apply()
-except Exception:
-    # If there's any issue, try to apply nest_asyncio anyway for compatibility
-    try:
-        nest_asyncio.apply()
-    except ValueError:
-        # If nest_asyncio fails, continue without it
-        pass
-
+nest_asyncio.apply()
 from fc.newsfetcher import NewsFetcher
 import os
-import time
 from contextlib import asynccontextmanager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from routes.user_broadcast import router
@@ -65,25 +39,43 @@ scheduler = AsyncIOScheduler()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print(f"Starting application on port: {os.getenv('PORT', '8000')}")
+    print("\n" + "="*60)
+    print("Starting Matrix of Truth Backend Server")
+    print("="*60)
     
+    # Check critical environment variables
+    critical_vars = ['GROQ_API_KEY', 'SERPER_API_KEY', 'GEMINI_API_KEY', 'NEWS_API_KEY']
+    print("\nEnvironment Variables Check:")
+    for var in critical_vars:
+        status = "✓ SET" if os.environ.get(var) else "✗ NOT SET"
+        print(f"  {var}: {status}")
+    
+    print("\nInitializing news database...")
     news_docs = news_fetcher.db_service.news_ref.limit(1).get()
 
     if len(list(news_docs)) == 0:
+        print("No news in database. Fetching initial news...")
         news_fetcher.fetch_initial_news()
+    else:
+        print("News database already initialized.")
     
+    print("\nScheduling news fetching job...")
     scheduler.add_job(fetch_and_broadcast_news, 'interval', seconds=60000000)
     # await fetch_and_broadcast_news()
     scheduler.start()
-    print(f"Application startup complete. Ready to serve traffic on port {os.getenv('PORT', '8000')}")
+    
+    print("\n" + "="*60)
+    print("Server is ready! Listening on http://127.0.0.1:8000")
+    print("API Documentation: http://127.0.0.1:8000/docs")
+    print("="*60 + "\n")
+    
     yield
-    print("Application shutting down...")
+    
+    print("\nShutting down server...")
     scheduler.shutdown()
+    print("Server stopped.")
 
 app = FastAPI(lifespan=lifespan)
-
-# Ensure port is available for Render
-PORT = int(os.getenv("PORT", 8000))
 
 # Configure CORS
 app.add_middleware(
@@ -104,30 +96,16 @@ app.include_router(deepfake_audio_router, tags=["Audio Detection"])
 app.include_router(video_broadcast.router)
 app.include_router(nlp_router, prefix="/nlp", tags=["NLP Analysis"])
 app.include_router(deepfake_router, prefix="/deepfake", tags=["Deepfake Detection"])
-
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the API", "status": "ready"}
+    return {"message": "Welcome to the API"}
 
 @app.get("/health")
 def health_check():
     return {
         "status": "healthy",
-        "version": "1.0.0",
-        "port": PORT,
-        "environment": os.getenv("RENDER_SERVICE_NAME", "local")
+        "version": "1.0.0"
     }
 
-@app.get("/ready")
-def readiness_check():
-    """Quick readiness probe for load balancers"""
-    return {"status": "ready", "timestamp": time.time()}
-
-@app.get("/ping")
-def ping():
-    """Ultra-fast ping endpoint"""
-    return "pong"
-
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

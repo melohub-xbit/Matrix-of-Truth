@@ -21,20 +21,18 @@ deepfake_router = APIRouter()
 # Load the model at startup
 model = None
 
-@deepfake_router.on_event("startup")
-async def startup_event():
+def initialize_model_if_needed():
     global model
-    try:
-        # model = load_model("deepfake_detector.h5")
-        # print("Deepfake detection model loaded successfully")
-        # Use absolute path for the model
-        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        model_path = os.path.join(current_dir, "deepfake_detection", "deepfake_detector.h5")
-        model = load_model(model_path)
-        print("Deepfake detection model loaded successfully")
-    except Exception as e:
-        print(f"Error loading deepfake detection model: {e}")
-        # We'll try to load it on first request
+    if model is None:
+        try:
+            # Use absolute path for the model
+            current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            model_path = os.path.join(current_dir, "deepfake_detection", "deepfake_detector.h5")
+            model = load_model(model_path)
+            print("Deepfake detection model loaded successfully")
+        except Exception as e:
+            print(f"Error loading deepfake detection model: {e}")
+            raise
 
 def process_image_in_memory(file_content: bytes) -> Dict[str, Any]:
     """Process an image from bytes and return detection results"""
@@ -91,11 +89,10 @@ async def analyze_image(file: UploadFile = File(...)):
     global model
     
     # Try to load the model if it's not loaded yet
-    if model is None:
-        try:
-            model = load_model("deepfake_detector.h5")
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Model not loaded: {str(e)}")
+    try:
+        initialize_model_if_needed()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Model not loaded: {str(e)}")
     
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
@@ -121,11 +118,10 @@ async def analyze_video(file: UploadFile = File(...)):
     global model
     
     # Try to load the model if it's not loaded yet
-    if model is None:
-        try:
-            model = load_model("deepfake_detector.h5")
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Model not loaded: {str(e)}")
+    try:
+        initialize_model_if_needed()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Model not loaded: {str(e)}")
     
     if not file.content_type.startswith("video/"):
         raise HTTPException(status_code=400, detail="File must be a video")

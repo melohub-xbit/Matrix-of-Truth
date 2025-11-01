@@ -49,10 +49,13 @@ async def search_news(search_data: SearchQuery):
 @input_router.post("/fact-check-selected-news")
 async def fact_check_selected_news(selection: NewsSelectionInput):
     try:
+        if not selection.news_url or not selection.news_url.strip():
+            raise HTTPException(status_code=400, detail="News URL cannot be empty")
+            
         # Get the news content using the existing get_news function
         news_result = get_news(selection.news_url)
         
-        if news_result['status'] == 'error' or len(news_result["summary"]) == 0:
+        if news_result.get('status') == 'error' or len(news_result.get("summary", "")) == 0:
             return {
                 "status": "error",
                 "content": "Unable to fetch the news from the url. Please try a different link"
@@ -60,41 +63,59 @@ async def fact_check_selected_news(selection: NewsSelectionInput):
         
         # Initialize the fact checker
         fact_checker = fact_checker_instance
+        if fact_checker is None:
+            raise HTTPException(status_code=500, detail="Fact checker not initialized")
         
         # Generate the fact check report
-        fact_check_result = fact_checker.generate_report(news_result['summary'])
+        fact_check_result = fact_checker.generate_report(news_result.get('summary', ''))
+        
+        if not fact_check_result:
+            raise HTTPException(status_code=500, detail="Fact check failed to generate results")
         
         return {
             "status": "success",
             "content": {
                 "fact_check_result": {
                     "detailed_analysis": {
-                        "overall_analysis": fact_check_result["detailed_analysis"]["overall_analysis"],
-                        "claim_analysis": fact_check_result["detailed_analysis"]["claim_analysis"],
-                        "source_analysis": fact_check_result["source_credibility"]
+                        "overall_analysis": fact_check_result.get("detailed_analysis", {}).get("overall_analysis", {}),
+                        "claim_analysis": fact_check_result.get("detailed_analysis", {}).get("claim_analysis", []),
+                        "source_analysis": fact_check_result.get("source_credibility", [])
                     }
                 },
-                "sources": fact_check_result["sources"]
+                "sources": fact_check_result.get("sources", [])
             }
         }
+    except HTTPException:
+        raise
     except Exception as e:
+        import traceback
+        error_detail = f"Error in fact checking selected news: {str(e)}\n{traceback.format_exc()}"
+        print(error_detail)
         raise HTTPException(status_code=500, detail=str(e))
 
 @input_router.post("/get-fc-url")
 async def get_fc_url(input_data: UrlInput):
     try:
+        if not input_data.url or not input_data.url.strip():
+            raise HTTPException(status_code=400, detail="URL cannot be empty")
+            
         news_text = get_news(input_data.url)
       
-        if news_text['status'] == 'error':
+        if news_text.get('status') == 'error':
             return {
-                "status": "Unable to fetch the news from the url. Please try a different link",
-                "content": None
+                "status": "error",
+                "content": "Unable to fetch the news from the url. Please try a different link"
             }
         
-        
         fact_checker = fact_checker_instance
+        if fact_checker is None:
+            raise HTTPException(status_code=500, detail="Fact checker not initialized")
+            
         # Run fact check - it will be run through transformation pipeline
-        fact_check_result1 = fact_checker.generate_report(news_text['text'])
+        fact_check_result1 = fact_checker.generate_report(news_text.get('text', ''))
+        
+        if not fact_check_result1:
+            raise HTTPException(status_code=500, detail="Fact check failed to generate results")
         
         #return an object with fact check result and visualization data, and explanation
         return {
@@ -102,23 +123,37 @@ async def get_fc_url(input_data: UrlInput):
             "content": {
                 "fact_check_result": {
                     "detailed_analysis" : {
-                        "overall_analysis" : fact_check_result1["detailed_analysis"]["overall_analysis"],
-                        "claim_analysis" : fact_check_result1["detailed_analysis"]["claim_analysis"],
-                        "source_analysis" : fact_check_result1["source_credibility"]
+                        "overall_analysis" : fact_check_result1.get("detailed_analysis", {}).get("overall_analysis", {}),
+                        "claim_analysis" : fact_check_result1.get("detailed_analysis", {}).get("claim_analysis", []),
+                        "source_analysis" : fact_check_result1.get("source_credibility", [])
                     }
                 },
-                "sources": fact_check_result1["sources"]
+                "sources": fact_check_result1.get("sources", [])
             }
         }
+    except HTTPException:
+        raise
     except Exception as e:
+        import traceback
+        error_detail = f"Error in fact checking URL: {str(e)}\n{traceback.format_exc()}"
+        print(error_detail)
         raise HTTPException(status_code=500, detail=str(e))
     
 @input_router.post("/get-fc-text")
 async def get_fc_text(input_data: TextInput):
     try:
+        if not input_data.text or not input_data.text.strip():
+            raise HTTPException(status_code=400, detail="Text cannot be empty")
+            
         fact_checker = fact_checker_instance
+        if fact_checker is None:
+            raise HTTPException(status_code=500, detail="Fact checker not initialized")
+            
         # Run fact check - it will be run through transformation pipeline
         fact_check_result1 = fact_checker.generate_report(input_data.text)
+        
+        if not fact_check_result1:
+            raise HTTPException(status_code=500, detail="Fact check failed to generate results")
    
         #return an object with fact check result and visualization data, and explanation
         return {
@@ -126,13 +161,18 @@ async def get_fc_text(input_data: TextInput):
             "content": {
                 "fact_check_result": {
                     "detailed_analysis" : {
-                        "overall_analysis" : fact_check_result1["detailed_analysis"]["overall_analysis"],
-                        "claim_analysis" : fact_check_result1["detailed_analysis"]["claim_analysis"],
-                        "source_analysis" : fact_check_result1["source_credibility"]
+                        "overall_analysis" : fact_check_result1.get("detailed_analysis", {}).get("overall_analysis", {}),
+                        "claim_analysis" : fact_check_result1.get("detailed_analysis", {}).get("claim_analysis", []),
+                        "source_analysis" : fact_check_result1.get("source_credibility", [])
                     }
                 },
-                "sources": fact_check_result1["sources"]
+                "sources": fact_check_result1.get("sources", [])
             }
         }
+    except HTTPException:
+        raise
     except Exception as e:
+        import traceback
+        error_detail = f"Error in fact checking: {str(e)}\n{traceback.format_exc()}"
+        print(error_detail)
         raise HTTPException(status_code=500, detail=str(e))

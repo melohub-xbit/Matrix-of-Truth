@@ -285,7 +285,7 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  {result["CNN Prediction"]}
+                  {result["CNN Prediction"] || "N/A"}
                 </div>
               </div>
 
@@ -300,7 +300,7 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  {result["Noise Pattern Analysis"]}
+                  {result["Noise Pattern Analysis"] || "N/A"}
                 </div>
               </div>
 
@@ -309,7 +309,7 @@ const DeepFakeImageVideo = () => {
                   Metadata Analysis
                 </h3>
                 <div className="text-gray-200">
-                  {result["Metadata Analysis"]}
+                  {result["Metadata Analysis"] || "N/A"}
                 </div>
               </div>
 
@@ -318,7 +318,7 @@ const DeepFakeImageVideo = () => {
                   Artifact Analysis
                 </h3>
                 <div className="text-gray-200">
-                  {result["Artifact Analysis"]}
+                  {result["Artifact Analysis"] || "N/A"}
                 </div>
               </div>
 
@@ -330,17 +330,19 @@ const DeepFakeImageVideo = () => {
                   <div>
                     <p className="text-gray-400 text-sm">Vertical</p>
                     <p className="text-lg">
-                      {result["Symmetry Analysis"]["Vertical Symmetry"].toFixed(
-                        2
-                      )}
+                      {typeof result["Symmetry Analysis"]?.["Vertical Symmetry"] ===
+                      "number"
+                        ? result["Symmetry Analysis"]["Vertical Symmetry"].toFixed(2)
+                        : "N/A"}
                     </p>
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm">Horizontal</p>
                     <p className="text-lg">
-                      {result["Symmetry Analysis"][
-                        "Horizontal Symmetry"
-                      ].toFixed(2)}
+                      {typeof result["Symmetry Analysis"]?.["Horizontal Symmetry"] ===
+                      "number"
+                        ? result["Symmetry Analysis"]["Horizontal Symmetry"].toFixed(2)
+                        : "N/A"}
                     </p>
                   </div>
                 </div>
@@ -359,7 +361,7 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  This {fileType} is {result["Final Prediction"].toLowerCase()}
+                  This {fileType} is {result["Final Prediction"]?.toLowerCase() || "unknown"}
                 </div>
               </div>
             </div>
