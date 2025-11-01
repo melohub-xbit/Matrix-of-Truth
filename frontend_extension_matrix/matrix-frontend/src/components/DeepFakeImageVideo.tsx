@@ -1,16 +1,12 @@
 import React, { useState, useRef } from "react";
 
 interface ImageAnalysisResult {
-  "CNN Prediction": "Real" | "Fake";
-  "Metadata Analysis": string;
-  "Artifact Analysis": string;
-  "Noise Pattern Analysis": "Real" | "Fake";
-  "Symmetry Analysis": {
-    "Vertical Symmetry": number;
-    "Horizontal Symmetry": number;
-  };
   "Final Prediction": "Real" | "Fake";
   "Confidence Score": number;
+  "Fake Percentage": number;
+  "Real Frames": number;
+  "Fake Frames": number;
+  "Total Frames Analyzed": number;
 }
 
 const DeepFakeImageVideo = () => {
@@ -81,6 +77,7 @@ const DeepFakeImageVideo = () => {
       }
 
       const data = await response.json();
+      console.log("Analysis result:", data);
       setResult(data);
     } catch (err) {
       console.error("Error analyzing file:", err);
@@ -271,10 +268,17 @@ const DeepFakeImageVideo = () => {
               >
                 {result["Final Prediction"]}
               </span>
+              <span
+                className={`ml-3 text-sm px-3 py-1 rounded-full ${getPredictionBadgeColor(
+                  result["Confidence Score"] > 0.5 ? "Real" : "Fake"
+                )}`}
+              >
+                {result["Confidence Score"] > 0.5 ? "Real" : "Fake"}
+              </span>
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700 p-4 rounded-lg">
+              {/* <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium mb-3 text-gray-300">
                   CNN Prediction
                 </h3>
@@ -285,11 +289,11 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  {result["CNN Prediction"] || "N/A"}
+                  {result["CNN Prediction"]}
                 </div>
-              </div>
+              </div> */}
 
-              <div className="bg-gray-700 p-4 rounded-lg">
+              {/* <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium mb-3 text-gray-300">
                   Noise Pattern Analysis
                 </h3>
@@ -300,29 +304,56 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  {result["Noise Pattern Analysis"] || "N/A"}
+                  {result["Noise Pattern Analysis"]}
                 </div>
-              </div>
+              </div> */}
 
-              <div className="bg-gray-700 p-4 rounded-lg">
+              {/* <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium mb-3 text-gray-300">
                   Metadata Analysis
                 </h3>
                 <div className="text-gray-200">
-                  {result["Metadata Analysis"] || "N/A"}
+                  {result["Metadata Analysis"]}
+                </div>
+              </div> */}
+
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-medium mb-3 text-gray-300">
+                  Total Frames Analyzed
+                </h3>
+                <div className="text-gray-200">
+                  {result["Total Frames Analyzed"]}
                 </div>
               </div>
 
               <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Artifact Analysis
+                  Fake Percentage
                 </h3>
                 <div className="text-gray-200">
-                  {result["Artifact Analysis"] || "N/A"}
+                  {result["Fake Percentage"]}
                 </div>
               </div>
 
               <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-medium mb-3 text-gray-300">
+                  Real Frames
+                </h3>
+                <div className="text-gray-200">
+                  {result["Real Frames"]}
+                </div>
+              </div> 
+
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-medium mb-3 text-gray-300">
+                  Fake Frames
+                </h3>
+                <div className="text-gray-200">
+                  {result["Fake Frames"]}
+                </div>
+              </div>
+
+              {/* <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium mb-3 text-gray-300">
                   Symmetry Analysis
                 </h3>
@@ -330,23 +361,21 @@ const DeepFakeImageVideo = () => {
                   <div>
                     <p className="text-gray-400 text-sm">Vertical</p>
                     <p className="text-lg">
-                      {typeof result["Symmetry Analysis"]?.["Vertical Symmetry"] ===
-                      "number"
-                        ? result["Symmetry Analysis"]["Vertical Symmetry"].toFixed(2)
-                        : "N/A"}
+                      {result["Symmetry Analysis"]["Vertical Symmetry"].toFixed(
+                        2
+                      )}
                     </p>
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm">Horizontal</p>
                     <p className="text-lg">
-                      {typeof result["Symmetry Analysis"]?.["Horizontal Symmetry"] ===
-                      "number"
-                        ? result["Symmetry Analysis"]["Horizontal Symmetry"].toFixed(2)
-                        : "N/A"}
+                      {result["Symmetry Analysis"][
+                        "Horizontal Symmetry"
+                      ].toFixed(2)}
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-8 p-4 bg-gray-700 rounded-lg">
@@ -361,7 +390,7 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  This {fileType} is {result["Final Prediction"]?.toLowerCase() || "unknown"}
+                  This {fileType} is {result["Final Prediction"].toLowerCase()}
                 </div>
               </div>
             </div>

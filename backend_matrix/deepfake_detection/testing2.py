@@ -69,7 +69,7 @@ def predict_video(video_path):
         results["Fake Frames"] = fake_count
         results["Real Frames"] = real_count
         results["Fake Percentage"] = round(fake_percentage, 2)
-        results["Final Video Prediction"] = "Fake" if fake_percentage > 50 else "Real"
+        results["Final Prediction"] = "Fake" if fake_percentage > 50 else "Real"
         results["Confidence Score"] = round(abs(50 - fake_percentage) / 50, 2)
         
         return results
