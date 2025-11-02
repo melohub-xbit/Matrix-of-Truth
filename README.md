@@ -11,10 +11,15 @@
 ![](https://img.shields.io/badge/Docker-Containerization-blue?logo=docker)
 ![](https://img.shields.io/badge/Machine%20Learning-Advanced%20AI-blueviolet)
 ![](https://img.shields.io/badge/NLP-Text%20Analysis-brightgreen)
+![](https://img.shields.io/badge/Google%20Cloud-Platform-4285F4?logo=google-cloud)
+![](https://img.shields.io/badge/Cloud%20Run-Deployment-4285F4?logo=google-cloud)
+![](https://img.shields.io/badge/Firebase-Realtime%20DB-FFCA28?logo=firebase)
+![](https://img.shields.io/badge/Gemini%20AI-2.0%20Flash-4285F4?logo=google)
 
 > **Team:** Coders@IIITB  
 > **Hackathon:** GenAI Exchange Hackathon  
-> **Challenge:** Build an AI-powered tool that detects potential misinformation and educates users on identifying credible, trustworthy content
+> **Challenge:** Build an AI-powered tool that detects potential misinformation and educates users on identifying credible, trustworthy content  
+> **Powered by:** Google Cloud Platform
 
 ## 🎯 Problem Statement
 
@@ -22,7 +27,7 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
 
 ## 🚀 Project Overview
 
-**Matrix of Truth** is an advanced AI-powered real-time misinformation detection system designed to combat false information across multiple media formats. The project leverages cutting-edge machine learning techniques to analyze text, audio, video, and image content, providing users with immediate insights about content credibility while educating them on media literacy.
+**Matrix of Truth** is an advanced AI-powered real-time misinformation detection system designed to combat false information across multiple media formats. Built on **Google Cloud Platform**, the project leverages cutting-edge machine learning techniques and cloud-native services to analyze text, audio, video, and image content at scale. The system provides users with immediate insights about content credibility while educating them on media literacy, all powered by enterprise-grade cloud infrastructure for reliability and performance.
 
 ## 🌟 Key Objectives
 
@@ -36,44 +41,60 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
 ## 🔬 Key Innovations & Features
 
 ### 1. **Multi-Modal Misinformation Detection**
-   - **Text Analysis**: Advanced NLP models using BERT and transformer architectures
+   - **Text Analysis**: Advanced NLP models using BERT and transformer architectures powered by Google Gemini AI
    - **Audio Analysis**: Deepfake audio detection and voice authenticity verification
-   - **Video Analysis**: Deepfake video detection and visual inconsistency identification
-   - **Image Analysis**: Image tampering detection using AI
+   - **Video Analysis**: Deepfake video detection and visual inconsistency identification using Gemini 2.0 Flash
+   - **Image Analysis**: AI-powered image tampering detection with Google Gemini 2.5 Flash
 
-### 2. **Real-Time Processing Engine**
+### 2. **🆕 Advanced Image Verification System**
+   - **Reverse Image Search**: Powered by Google Cloud Vision API's Web Detection feature
+   - **Authenticity Verification**: Identifies if images are original or manipulated
+   - **Source Tracking**: Finds earliest occurrences of images across the web
+   - **Similarity Detection**: Detects full matches, partial matches, and visually similar images
+   - **Context Analysis**: Provides web entities and labels for comprehensive understanding
+   - **Real-time Analysis**: Instant verification results with detailed authenticity reports
+
+### 3. **🆕 Intelligent Scam Alerts System**
+   - **Proactive Monitoring**: Real-time scanning of web sources using Gemini's Search Grounding feature
+   - **Recent Scam Detection**: Identifies and tracks emerging scam patterns and fraud attempts
+   - **Automated Analysis**: AI-powered analysis of reported scams and fraudulent activities
+   - **User Protection**: Provides timely alerts about prevalent scams to protect users
+   - **Pattern Recognition**: Identifies common scam tactics and warning signs
+   - **Community Safety**: Aggregates scam reports to build a comprehensive threat database
+
+### 4. **Real-Time Processing Engine**
    - Live content monitoring and analysis
    - Instant alerts and credibility scoring
    - High-throughput processing using Apache Kafka
-   - Scalable cloud deployment architecture
+   - Scalable cloud deployment on Google Cloud Run
 
-### 3. **Educational Framework**
+### 5. **Educational Framework**
    - Interactive tutorials on identifying misinformation
    - Source credibility assessment tools
    - Media literacy resources and best practices
    - Visual explanations of AI decision-making processes
 
-### 4. **Social Media Analysis Engine**
+### 6. **Social Media Analysis Engine**
    - Monitor trends across platforms like Twitter, Facebook, and TikTok
    - Identify misinformation patterns before viral spread
    - Advanced social graph analysis for content verification
 
-### 5. **Impact Analysis System**
+### 7. **Impact Analysis System**
    - Assess misinformation consequences in health, politics, and economics
    - Model spread patterns using network theory
    - Predict potential reach and impact of false information
 
-### 6. **Explainable AI (XAI)**
+### 8. **Explainable AI (XAI)**
    - Provide transparent decision-making processes
    - Visualize confidence scores and decision paths
    - Educational insights into how AI detects misinformation
 
-### 7. **Source Correction Framework**
+### 9. **Source Correction Framework**
    - Evaluate information source credibility using CRAAP method
    - Suggest alternative, reliable sources
    - Provide correction templates and fact-checking resources
 
-### 8. **Continuous Learning System**
+### 10. **Continuous Learning System**
    - Implement adaptive feedback loops
    - Enable ongoing model improvements based on user reports
    - Community-driven fact-checking validation
@@ -87,14 +108,135 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
 - **Mobile Applications**: On-the-go misinformation detection
 - **Broadcast Media**: Live content verification systems
 
+## ☁️ Google Cloud Platform Integration
+
+**Matrix of Truth** leverages Google Cloud Platform's robust infrastructure and AI services to deliver enterprise-grade misinformation detection at scale. Our cloud-native architecture ensures reliability, scalability, and security.
+
+### **Cloud Infrastructure & Deployment**
+
+#### **Google Cloud Run**
+- **Serverless Containerized Deployment**: Backend services deployed on Cloud Run for automatic scaling and high availability
+- **Performance Optimized**: 2 vCPU, 2GB RAM configuration with auto-scaling (1-5 instances)
+- **Cost Efficient**: Pay-per-use pricing with automatic scaling to zero when idle
+- **Regional Deployment**: Deployed in `asia-south1` for optimal latency
+
+#### **Google Cloud Build**
+- **Automated CI/CD Pipeline**: Continuous integration and deployment triggered on code commits
+- **Docker Image Building**: Automated containerization using Cloud Build triggers
+- **Multi-stage Deployment**: Build → Push to Artifact Registry → Deploy to Cloud Run
+- **High-Performance Builds**: Utilizes E2_HIGHCPU_8 machine type for faster build times
+- **Build Optimization**: Docker layer caching enabled for efficient rebuilds
+
+#### **Google Artifact Registry**
+- **Container Image Storage**: Centralized repository for Docker images
+- **Version Control**: Tagged images with commit SHA and latest tags
+- **Regional Storage**: Images stored in `asia-south1` for fast deployment
+- **Secure Access**: IAM-based access control for image management
+
+### **AI & Machine Learning Services**
+
+#### **Google Gemini AI**
+- **Gemini 2.0 Flash**: Advanced video analysis and content understanding
+- **Gemini 2.5 Flash**: Cutting-edge image analysis and misinformation detection
+- **Structured Output**: JSON-based responses with schema validation for consistent results
+- **Multi-modal Analysis**: Simultaneous processing of text, images, and video content
+- **Search Grounding**: Real-time web search integration for scam alerts and verification
+
+#### **Google Cloud Vision API**
+- **Web Detection**: Reverse image search to identify image origins and manipulations
+- **Entity Recognition**: Automatic labeling and entity extraction from images
+- **Similar Image Detection**: Finding full matches, partial matches, and visually similar images
+- **Page Matching**: Identifying web pages containing the analyzed image
+- **Authenticity Verification**: Determining if images are original or edited based on web presence
+
+### **Security & Configuration Management**
+
+#### **Google Cloud Secret Manager**
+- **Secure Secrets Storage**: All API keys and sensitive credentials stored securely
+- **Environment Variable Management**: Seamless injection of secrets into Cloud Run instances
+- **Automatic Updates**: Latest secret versions automatically pulled during deployment
+- **Access Control**: Fine-grained IAM permissions for secret access
+- **Managed Secrets**: 20+ environment variables including:
+  - AI API Keys (Gemini, Groq, Serper)
+  - Firebase credentials (12+ configuration parameters)
+  - Third-party service credentials (Pusher, News API)
+  - Google Cloud service account credentials
+
+### **Storage & Database Services**
+
+#### **Google Cloud Storage**
+- **ML Model Storage**: Large model files stored in GCS buckets (`matrix-of-truth-models`)
+- **On-Demand Loading**: Models downloaded at runtime to reduce container size
+- **Cost Optimization**: Eliminates need to bundle large models in Docker images
+- **Models Stored**:
+  - Deepfake detection models (`deepfake_detector.h5`)
+  - NLP knowledge graphs (`knowledge_graph_final.pkl`)
+  - Fine-tuned transformer checkpoints (`checkpoint-753/`)
+- **Automatic Download**: Model loader service with GCS integration
+
+#### **Firebase Firestore**
+- **Real-time Database**: NoSQL database for storing news articles and fact-check results
+- **Real-time Sync**: Instant updates pushed to connected clients
+- **Scalable Storage**: Handles growing datasets with automatic scaling
+- **Collections**:
+  - `news`: Stores fetched news articles with processing status
+  - `factcheck`: Contains detailed fact-check analysis results
+  - `user_broadcast`: User-submitted content for verification
+  - `scam_alerts`: Real-time scam alerts and warnings
+- **Service Account Integration**: Secure authentication using Firebase Admin SDK
+
+### **Cloud Architecture Benefits**
+
+✅ **Scalability**: Automatic scaling from 0 to multiple instances based on demand  
+✅ **Reliability**: 99.95% SLA with automatic health checks and restarts  
+✅ **Security**: End-to-end encryption, Secret Manager, and IAM access controls  
+✅ **Performance**: Global CDN, regional deployment, and optimized model loading  
+✅ **Cost Efficiency**: Pay-per-use pricing with automatic scaling and resource optimization  
+✅ **Developer Productivity**: Automated CI/CD, managed infrastructure, and seamless deployments  
+✅ **Monitoring**: Cloud Logging integration for comprehensive observability  
+
+### **Deployment Pipeline**
+
+```yaml
+Code Push → GitHub → Cloud Build Trigger
+    ↓
+Build Docker Image → Artifact Registry
+    ↓
+Deploy to Cloud Run → Inject Secrets from Secret Manager
+    ↓
+Health Check → Service Live
+    ↓
+Auto-scale based on traffic
+```
+
+### **Environment Variables Management**
+
+All sensitive configuration managed through Google Cloud Secret Manager:
+- **API Keys**: Gemini, Groq, Serper, News API
+- **Firebase Config**: Complete service account credentials
+- **Service Credentials**: Pusher, fact-checking services
+- **Application Secrets**: Security keys and tokens
+- **No .env files**: Eliminates security risks of committed credentials
+
 ## 🧠 Technical Architecture
+
+### Cloud-Native Infrastructure
+- **Deployment Platform**: Google Cloud Run (Serverless Containers)
+- **Container Registry**: Google Artifact Registry
+- **CI/CD Pipeline**: Google Cloud Build with automated deployments
+- **Configuration Management**: Google Cloud Secret Manager
+- **Model Storage**: Google Cloud Storage (GCS)
+- **Real-time Database**: Firebase Firestore
+- **Logging**: Google Cloud Logging
 
 ### Backend Infrastructure
 - **Python-based microservices architecture**
 - **FastAPI for high-performance API endpoints**
 - **Real-time processing with Apache Kafka**
 - **Machine learning models using TensorFlow and PyTorch**
-- **Database integration with Firebase and Neo4j**
+- **Containerized deployment with Docker**
+- **Automated model loading from Google Cloud Storage**
+- **Environment management via Secret Manager**
 
 ### Frontend Applications
 - **React-based web dashboard**
@@ -107,6 +249,8 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
 - **Computer Vision**: CNN-based deepfake detection models
 - **Audio Processing**: Spectral analysis and voice authentication
 - **Knowledge Graphs**: Fact verification using structured data
+- **Google Gemini AI**: Multi-modal content analysis (2.0 Flash & 2.5 Flash)
+- **Google Cloud Vision**: Image verification and reverse search
 
 ### Data Sources & APIs
 - Fact-checking APIs (Google FactCheck, PolitiFact, Snopes)
@@ -114,6 +258,8 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
 - Social media monitoring tools
 - Academic research databases
 - Government fact-checking resources
+- Google Cloud Vision API for image analysis
+- Gemini AI with Search Grounding for scam detection
 
 ## 🎯 Hackathon Alignment
 
@@ -127,30 +273,44 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
 
 ## 🚀 Innovation Highlights
 
-- **Multi-modal approach**: First-of-its-kind system analyzing text, audio, video, and images simultaneously
+- **Cloud-Native Architecture**: Built on Google Cloud Platform for enterprise-grade reliability and scalability
+- **Multi-modal approach**: Comprehensive system analyzing text, audio, video, and images simultaneously
+- **Advanced Image Verification**: Google Cloud Vision API integration for reverse image search and authenticity detection
+- **Proactive Scam Detection**: Real-time web monitoring using Gemini's Search Grounding to identify emerging threats
 - **Educational AI**: AI that not only detects but also teaches users how to identify misinformation
 - **Real-time processing**: Instant analysis and feedback for live content
 - **Explainable decisions**: Transparent AI that shows users exactly how it reaches conclusions
 - **Community validation**: Crowdsourced fact-checking with AI moderation
+- **Automated CI/CD**: Google Cloud Build pipeline for continuous deployment
+- **Secure by Design**: Cloud Secret Manager for enterprise-grade security
+- **Intelligent Model Management**: On-demand loading from Cloud Storage for optimal performance
+- **Serverless Scaling**: Automatic resource allocation based on real-time demand
 
 ## 📊 Impact & Metrics
 
 - **Detection Accuracy**: >95% accuracy in identifying misinformation across content types
 - **User Education**: Measurable improvement in users' ability to identify credible sources
 - **Real-time Performance**: Sub-second analysis for most content types
-- **Scalability**: Capable of processing thousands of simultaneous requests
+- **Cloud Scalability**: Automatic scaling from 0 to 5 instances based on demand
+- **Uptime**: 99.95% availability with Google Cloud Run SLA
 - **User Engagement**: Interactive educational tools with high retention rates
+- **Image Verification**: Real-time reverse image search with comprehensive web detection
+- **Scam Detection**: Proactive monitoring and alerting for emerging fraud patterns
+- **Global Reach**: Low-latency access via Google Cloud's global infrastructure
+- **Cost Efficiency**: Optimized resource utilization with pay-per-use pricing
 
 ## 🛠️ Technical Implementation
 
 ### Installation & Setup
+
+#### Local Development Setup
 ```bash
 # Clone the repository
 git clone https://github.com/DemonPLAYZ/Matrix-of-Truth.git
 cd Matrix-of-Truth
 
 # Backend setup
-cd backend
+cd backend_matrix
 pip install -r requirements.txt
 python main.py
 
@@ -163,22 +323,66 @@ npm run dev
 # Load the matrix-extension folder in Chrome developer mode
 ```
 
+#### Cloud Deployment (Google Cloud Platform)
+
+```bash
+# Prerequisites
+- Google Cloud account with credits
+- gcloud CLI installed and configured
+- Docker installed locally
+
+# 1. Set up Google Cloud Project
+gcloud config set project YOUR_PROJECT_ID
+
+# 2. Enable required APIs
+gcloud services enable run.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable secretmanager.googleapis.com
+gcloud services enable storage.googleapis.com
+gcloud services enable vision.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
+
+# 3. Create Cloud Storage bucket for models
+gsutil mb -l asia-south1 gs://matrix-of-truth-models
+gsutil cp local_models/* gs://matrix-of-truth-models/
+
+# 4. Store secrets in Secret Manager
+gcloud secrets create GEMINI_API_KEY --data-file=-
+gcloud secrets create GOOGLE_API_KEY --data-file=-
+# ... (repeat for all environment variables)
+
+# 5. Deploy using Cloud Build
+gcloud builds submit --config cloudbuild.yaml
+
+# 6. Access deployed service
+gcloud run services describe matrix-backend --region=asia-south1
+```
+
 ### Key Components
-- **Backend API**: FastAPI-based microservices
-- **Frontend Dashboard**: React-based user interface
+- **Backend API**: FastAPI-based microservices deployed on Cloud Run
+- **Frontend Dashboard**: React-based user interface hosted on Vercel
 - **Browser Extension**: Chrome extension for real-time web analysis
-- **ML Models**: Pre-trained models for various content types
-- **Database**: Firebase for user data, Neo4j for knowledge graphs
+- **ML Models**: Pre-trained models stored in Google Cloud Storage
+- **Database**: Firebase Firestore for real-time data storage
+- **CI/CD**: Automated deployment via Google Cloud Build
+- **Secrets Management**: Google Cloud Secret Manager for secure configuration
 
 ## 🎉 Project Vision
 
 **Matrix of Truth** aims to create a more informed digital society by:
-- **Combating misinformation** at its source with advanced AI detection
+- **Combating misinformation** at its source with advanced AI detection powered by Google Cloud
 - **Educating users** on media literacy and critical thinking skills
 - **Providing transparency** in AI decision-making processes
 - **Building trust** in digital content through verifiable analysis
 - **Empowering individuals** to make informed decisions about information consumption
+- **Leveraging cloud technology** to deliver enterprise-grade solutions at scale
+- **Protecting users** from scams and fraud through proactive monitoring
+- **Ensuring reliability** with 99.95% uptime using Google Cloud infrastructure
 
 ## 🏆 Team Coders@IIITB
 
-We are a passionate team of developers and researchers from IIIT Bangalore, committed to leveraging technology for social good. Our expertise spans across artificial intelligence, machine learning, web development, and user experience design.
+We are a passionate team of developers and researchers from IIIT Bangalore, committed to leveraging technology for social good. Our expertise spans across artificial intelligence, machine learning, cloud computing, web development, and user experience design. This project showcases our ability to build production-ready, cloud-native applications that address real-world challenges using Google Cloud Platform's cutting-edge services.
+
+---
+
+**Built with ❤️ by Team Coders@IIITB | Powered by Google Cloud Platform**
