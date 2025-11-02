@@ -79,30 +79,34 @@ export default function Dashboard() {
           </motion.p>
           
           <Tabs defaultValue="fact-checker" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-8 rounded-lg h-auto bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 gap-2 mb-4 sm:mb-8 rounded-lg h-auto bg-slate-800/50 backdrop-blur-sm border border-slate-700 p-2">
               <TabsTrigger
                 value="fact-checker"
-                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-xs sm:text-sm lg:text-base bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis"
               >
-                AI Fact Checker
+                <span className="hidden sm:inline">AI Fact Checker</span>
+                <span className="sm:hidden">Fact Check</span>
               </TabsTrigger>
               <TabsTrigger
                 value="content-verification"
-                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-orange-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-yellow-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-xs sm:text-sm lg:text-base bg-slate-800/70 text-white hover:bg-orange-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-yellow-600 transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis"
               >
-                Content Verification
+                <span className="hidden sm:inline">Content Verification</span>
+                <span className="sm:hidden">Verify</span>
               </TabsTrigger>
               <TabsTrigger
                 value="deepfake-detection"
-                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-yellow-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-600 data-[state=active]:to-red-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-xs sm:text-sm lg:text-base bg-slate-800/70 text-white hover:bg-yellow-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-600 data-[state=active]:to-red-600 transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis"
               >
-                Deepfake Detection
+                <span className="hidden md:inline">Deepfake/Manipulation Detection</span>
+                <span className="md:hidden">Deepfake</span>
               </TabsTrigger>
               <TabsTrigger
                 value="realtime-news"
-                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-xs sm:text-sm lg:text-base bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis"
               >
-                Live News Monitor
+                <span className="hidden sm:inline">Live News Monitor</span>
+                <span className="sm:hidden">News</span>
               </TabsTrigger>
             </TabsList>
 
