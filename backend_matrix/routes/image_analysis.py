@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
+from pydantic import BaseModel
 import google.generativeai as genai
 import PIL.Image
 import io
@@ -23,7 +24,7 @@ async def analyze_image_endpoint(file: UploadFile = File(...)):
         
         # Configure Gemini
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         # Prepare prompt
         prompt = "Analyze the content in this image and detect if it contains misinformation or bias. First state if the content is real or fake. Then give a short summary regarding the content. Then Summarize key points."

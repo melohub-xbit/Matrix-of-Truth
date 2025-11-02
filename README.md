@@ -39,7 +39,7 @@ In today's digital age, misinformation spreads at an unprecedented rate across v
    - **Text Analysis**: Advanced NLP models using BERT and transformer architectures
    - **Audio Analysis**: Deepfake audio detection and voice authenticity verification
    - **Video Analysis**: Deepfake video detection and visual inconsistency identification
-   - **Image Analysis**: Image tampering detection and reverse image search capabilities
+   - **Image Analysis**: Image tampering detection using AI
 
 ### 2. **Real-Time Processing Engine**
    - Live content monitoring and analysis
