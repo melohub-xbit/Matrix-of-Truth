@@ -68,7 +68,7 @@ async def lifespan(app: FastAPI):
         print("News database already initialized.")
     
     print("\nScheduling news fetching job...")
-    scheduler.add_job(fetch_and_broadcast_news, 'interval', seconds=60000000)
+    scheduler.add_job(fetch_and_broadcast_news, 'interval', seconds=90)
     # await fetch_and_broadcast_news()
     scheduler.start()
     
