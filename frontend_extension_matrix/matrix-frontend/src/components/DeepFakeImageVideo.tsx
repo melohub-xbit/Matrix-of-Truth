@@ -22,8 +22,6 @@ interface VideoAnalysisResult {
   "Confidence Score": number;
 }
 
-type AnalysisResult = ImageAnalysisResult | VideoAnalysisResult;
-
 const DeepFakeImageVideo = () => {
   const [file, setFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<"image" | "video">("image");
