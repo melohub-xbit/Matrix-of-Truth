@@ -193,15 +193,15 @@ def update_knowledge_graph(text, is_real, knowledge_graph, nlp, save=True, push_
             else:
                 knowledge_graph[entity1][entity2]['weight'] += 1
     
-    if save:
-        from nlp_model.save_model import save_knowledge_graph
-        filepath = save_knowledge_graph(knowledge_graph)
+    # if save:
+    #     from save_model import save_knowledge_graph
+    #     filepath = save_knowledge_graph(knowledge_graph)
         
-        # Push to Hugging Face only if explicitly requested
-        if push_to_hf:
-            from nlp_model.save_model import push_to_huggingface
-            repo_id = os.getenv("HF_REPO_ID", "HeheBoi0769/Nexus_NLP_model")
-            push_to_huggingface(filepath, repo_id)
+    #     # Push to Hugging Face only if explicitly requested
+    #     if push_to_hf:
+    #         from nlp_model.save_model import push_to_huggingface
+    #         repo_id = os.getenv("HF_REPO_ID", "HeheBoi0769/Nexus_NLP_model")
+    #         push_to_huggingface(filepath, repo_id)
     
     return knowledge_graph
 
