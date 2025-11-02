@@ -47,6 +47,7 @@ deployment_logs/
 .gitignore
 
 # Environment (use Secret Manager instead)
+service_acc/
 .env
 .env.*
 

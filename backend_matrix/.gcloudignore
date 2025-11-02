@@ -67,5 +67,7 @@ INTEGRATION_FIX_README.md
 NLP_FIX_GUIDE.md
 nltk_data/
 
+service_acc/
+
 # Note: Dockerfile and .dockerignore are NEEDED for Cloud Run builds
 # Don't exclude these!
