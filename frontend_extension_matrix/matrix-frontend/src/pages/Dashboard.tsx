@@ -59,9 +59,9 @@ export default function Dashboard() {
         {/* Matrix Rain Background */}
         <MatrixRain />
         
-        <div className="container mx-auto p-8 pt-20 relative z-10">
+        <div className="max-w-[90rem] mx-auto px-4 md:px-6 lg:px-8 pt-16 md:pt-20 relative z-10">
           <motion.h1 
-            className="text-4xl font-bold mb-8 bg-gradient-to-r from-red-400 via-orange-300 to-yellow-400 bg-clip-text text-transparent text-center"
+            className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 md:mb-8 bg-gradient-to-r from-red-400 via-orange-300 to-yellow-400 bg-clip-text text-transparent text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -70,7 +70,7 @@ export default function Dashboard() {
           </motion.h1>
           
           <motion.p
-            className="text-center text-slate-400 mb-12 text-lg"
+            className="text-center text-slate-400 mb-8 md:mb-12 text-base md:text-lg max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -79,44 +79,44 @@ export default function Dashboard() {
           </motion.p>
           
           <Tabs defaultValue="fact-checker" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 gap-4 mb-8 rounded-lg h-auto bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-8 rounded-lg h-auto bg-slate-800/50 backdrop-blur-sm border border-slate-700">
               <TabsTrigger
                 value="fact-checker"
-                className="p-3 bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300"
               >
                 AI Fact Checker
               </TabsTrigger>
               <TabsTrigger
                 value="content-verification"
-                className="p-3 bg-slate-800/70 text-white hover:bg-orange-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-yellow-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-orange-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-yellow-600 transition-all duration-300"
               >
                 Content Verification
               </TabsTrigger>
               <TabsTrigger
                 value="deepfake-detection"
-                className="p-3 bg-slate-800/70 text-white hover:bg-yellow-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-600 data-[state=active]:to-red-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-yellow-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-600 data-[state=active]:to-red-600 transition-all duration-300"
               >
                 Deepfake Detection
               </TabsTrigger>
               <TabsTrigger
                 value="realtime-news"
-                className="p-3 bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300"
+                className="p-2 sm:p-3 text-sm sm:text-base bg-slate-800/70 text-white hover:bg-red-600/20 data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600 data-[state=active]:to-orange-600 transition-all duration-300"
               >
                 Live News Monitor
               </TabsTrigger>
             </TabsList>
 
             <div className="mt-4">
-              <TabsContent value="fact-checker" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+              <TabsContent value="fact-checker" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-3 sm:p-6">
                 <NLP />
               </TabsContent>
-              <TabsContent value="content-verification" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+              <TabsContent value="content-verification" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-3 sm:p-6">
                 <UserInput />
               </TabsContent>
-              <TabsContent value="deepfake-detection" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+              <TabsContent value="deepfake-detection" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-3 sm:p-6">
                 <DeepfakeDetection />
               </TabsContent>
-              <TabsContent value="realtime-news" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-6">
+              <TabsContent value="realtime-news" className="bg-slate-800/30 backdrop-blur-sm rounded-lg border border-slate-700 p-3 sm:p-6">
                 <RealtimeNews />
               </TabsContent>
             </div>
