@@ -1,11 +1,26 @@
 import os
+import json
 from google.cloud import storage
+from google.oauth2 import service_account
 from pathlib import Path
+
+def get_credentials():
+    """Get Google Cloud credentials from JSON in environment variable"""
+    creds_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+    if creds_json:
+        try:
+            creds_dict = json.loads(creds_json)
+            return service_account.Credentials.from_service_account_info(creds_dict)
+        except json.JSONDecodeError:
+            # If it's a file path, return None to use default
+            return None
+    return None
 
 def download_from_gcs(bucket_name, source_blob_name, destination_file_name):
     """Download a file from Google Cloud Storage"""
     try:
-        storage_client = storage.Client()
+        credentials = get_credentials()
+        storage_client = storage.Client(credentials=credentials) if credentials else storage.Client()
         bucket = storage_client.bucket(bucket_name)
         blob = bucket.blob(source_blob_name)
         
@@ -22,7 +37,8 @@ def download_from_gcs(bucket_name, source_blob_name, destination_file_name):
 def download_folder_from_gcs(bucket_name, prefix, local_dir):
     """Download all files from a GCS folder"""
     try:
-        storage_client = storage.Client()
+        credentials = get_credentials()
+        storage_client = storage.Client(credentials=credentials) if credentials else storage.Client()
         bucket = storage_client.bucket(bucket_name)
         blobs = bucket.list_blobs(prefix=prefix)
         

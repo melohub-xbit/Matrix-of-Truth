@@ -2,13 +2,27 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
 from google.cloud import vision
+from google.oauth2 import service_account
 import PIL.Image
 import io
 import os
+import json
 from typing import List, Optional
 from datetime import datetime
 
 image_router = APIRouter()
+
+def get_vision_credentials():
+    """Get Google Cloud credentials from JSON in environment variable"""
+    creds_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+    if creds_json:
+        try:
+            creds_dict = json.loads(creds_json)
+            return service_account.Credentials.from_service_account_info(creds_dict)
+        except json.JSONDecodeError:
+            # If it's a file path, return None to use default
+            return None
+    return None
 
 @image_router.post("/analyze-image")
 async def analyze_image_endpoint(file: UploadFile = File(...)):
@@ -86,19 +100,12 @@ async def reverse_image_search_endpoint(file: UploadFile = File(...)):
         if not file:
             raise HTTPException(status_code=400, detail="No file uploaded")
         
-        # Check if GOOGLE_APPLICATION_CREDENTIALS is set
-        credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-        if not credentials_path:
-            raise HTTPException(
-                status_code=500, 
-                detail="GOOGLE_APPLICATION_CREDENTIALS not configured. Please set up Google Cloud Vision API credentials."
-            )
-        
         # Read image content
         content = await file.read()
         
-        # Create Vision API client
-        client = vision.ImageAnnotatorClient()
+        # Create Vision API client with credentials
+        credentials = get_vision_credentials()
+        client = vision.ImageAnnotatorClient(credentials=credentials) if credentials else vision.ImageAnnotatorClient()
         
         # Construct the image
         image = vision.Image(content=content)
