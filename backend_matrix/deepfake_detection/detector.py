@@ -14,7 +14,15 @@ from PIL.ExifTags import TAGS
 # Use absolute path for the model
 current_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(current_dir, "deepfake_detector.h5")
-model = load_model(model_path)
+
+# Lazy load model (only load when first needed, not at import time)
+_model = None
+
+def get_model():
+    global _model
+    if _model is None:
+        _model = load_model(model_path)
+    return _model
 
 
 # Image dimensions
@@ -27,6 +35,7 @@ def predict_image(img_path):
     img = image.load_img(img_path, target_size=(img_height, img_width))
     img_array = image.img_to_array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
+    model = get_model()  # Load model on first use
     prediction = model.predict(img_array)
     return "Fake" if prediction[0][0] > 0.5 else "Real"
 

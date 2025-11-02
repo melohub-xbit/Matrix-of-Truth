@@ -43,6 +43,14 @@ async def lifespan(app: FastAPI):
     print("Starting Matrix of Truth Backend Server")
     print("="*60)
     
+    # Download models from Cloud Storage if needed
+    print("\nChecking model files...")
+    try:
+        from core.model_loader import ensure_models_available
+        ensure_models_available()
+    except Exception as e:
+        print(f"Warning: Could not download models: {e}")
+    
     # Check critical environment variables
     critical_vars = ['GROQ_API_KEY', 'SERPER_API_KEY', 'GEMINI_API_KEY', 'NEWS_API_KEY']
     print("\nEnvironment Variables Check:")

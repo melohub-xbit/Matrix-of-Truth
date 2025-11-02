@@ -1,19 +1,34 @@
 import React, { useState, useRef } from "react";
 
 interface ImageAnalysisResult {
+  "CNN Prediction": "Real" | "Fake";
+  "Metadata Analysis": string;
+  "Artifact Analysis": string;
+  "Noise Pattern Analysis": "Real" | "Fake";
+  "Symmetry Analysis": {
+    "Vertical Symmetry": number;
+    "Horizontal Symmetry": number;
+  };
   "Final Prediction": "Real" | "Fake";
   "Confidence Score": number;
-  "Fake Percentage": number;
-  "Real Frames": number;
-  "Fake Frames": number;
-  "Total Frames Analyzed": number;
 }
+
+interface VideoAnalysisResult {
+  "Total Frames Analyzed": number;
+  "Fake Frames": number;
+  "Real Frames": number;
+  "Fake Percentage": number;
+  "Final Prediction": "Real" | "Fake";
+  "Confidence Score": number;
+}
+
+type AnalysisResult = ImageAnalysisResult | VideoAnalysisResult;
 
 const DeepFakeImageVideo = () => {
   const [file, setFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<"image" | "video">("image");
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<ImageAnalysisResult | null>(null);
+  const [result, setResult] = useState<ImageAnalysisResult | VideoAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +92,7 @@ const DeepFakeImageVideo = () => {
       }
 
       const data = await response.json();
-      console.log("Analysis result:", data);
+
       setResult(data);
     } catch (err) {
       console.error("Error analyzing file:", err);
@@ -99,6 +114,14 @@ const DeepFakeImageVideo = () => {
 
   const getPredictionBadgeColor = (prediction: "Real" | "Fake") => {
     return prediction === "Real" ? "bg-green-500" : "bg-red-500";
+  };
+
+  const isImageResult = (result: ImageAnalysisResult | VideoAnalysisResult): result is ImageAnalysisResult => {
+    return "CNN Prediction" in result;
+  };
+
+  const isVideoResult = (result: ImageAnalysisResult | VideoAnalysisResult): result is VideoAnalysisResult => {
+    return "Total Frames Analyzed" in result;
   };
 
   return (
@@ -268,115 +291,172 @@ const DeepFakeImageVideo = () => {
               >
                 {result["Final Prediction"]}
               </span>
-              <span
-                className={`ml-3 text-sm px-3 py-1 rounded-full ${getPredictionBadgeColor(
-                  result["Confidence Score"] > 0.5 ? "Real" : "Fake"
-                )}`}
-              >
-                {result["Confidence Score"] > 0.5 ? "Real" : "Fake"}
-              </span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  CNN Prediction
-                </h3>
-                <div
-                  className={`text-xl font-bold ${
-                    result["CNN Prediction"] === "Real"
-                      ? "text-green-400"
-                      : "text-red-400"
-                  }`}
-                >
-                  {result["CNN Prediction"]}
-                </div>
-              </div> */}
-
-              {/* <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Noise Pattern Analysis
-                </h3>
-                <div
-                  className={`text-xl font-bold ${
-                    result["Noise Pattern Analysis"] === "Real"
-                      ? "text-green-400"
-                      : "text-red-400"
-                  }`}
-                >
-                  {result["Noise Pattern Analysis"]}
-                </div>
-              </div> */}
-
-              {/* <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Metadata Analysis
-                </h3>
-                <div className="text-gray-200">
-                  {result["Metadata Analysis"]}
-                </div>
-              </div> */}
-
-              <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Total Frames Analyzed
-                </h3>
-                <div className="text-gray-200">
-                  {result["Total Frames Analyzed"]}
-                </div>
-              </div>
-
-              <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Fake Percentage
-                </h3>
-                <div className="text-gray-200">
-                  {result["Fake Percentage"]}
-                </div>
-              </div>
-
-              <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Real Frames
-                </h3>
-                <div className="text-gray-200">
-                  {result["Real Frames"]}
-                </div>
-              </div> 
-
-              <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Fake Frames
-                </h3>
-                <div className="text-gray-200">
-                  {result["Fake Frames"]}
-                </div>
-              </div>
-
-              {/* <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-3 text-gray-300">
-                  Symmetry Analysis
-                </h3>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <p className="text-gray-400 text-sm">Vertical</p>
-                    <p className="text-lg">
-                      {result["Symmetry Analysis"]["Vertical Symmetry"].toFixed(
-                        2
-                      )}
-                    </p>
+            {isImageResult(result) ? (
+              // Image Analysis Results
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      CNN Prediction
+                    </h3>
+                    <div
+                      className={`text-xl font-bold ${
+                        result["CNN Prediction"] === "Real"
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {result["CNN Prediction"] || "N/A"}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Horizontal</p>
-                    <p className="text-lg">
-                      {result["Symmetry Analysis"][
-                        "Horizontal Symmetry"
-                      ].toFixed(2)}
-                    </p>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Noise Pattern Analysis
+                    </h3>
+                    <div
+                      className={`text-xl font-bold ${
+                        result["Noise Pattern Analysis"] === "Real"
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {result["Noise Pattern Analysis"] || "N/A"}
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Metadata Analysis
+                    </h3>
+                    <div className="text-gray-200">
+                      {result["Metadata Analysis"] || "N/A"}
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Artifact Analysis
+                    </h3>
+                    <div className="text-gray-200">
+                      {result["Artifact Analysis"] || "N/A"}
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Symmetry Analysis
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <p className="text-gray-400 text-sm">Vertical</p>
+                        <p className="text-lg">
+                          {typeof result["Symmetry Analysis"]?.["Vertical Symmetry"] ===
+                          "number"
+                            ? result["Symmetry Analysis"]["Vertical Symmetry"].toFixed(2)
+                            : "N/A"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">Horizontal</p>
+                        <p className="text-lg">
+                          {typeof result["Symmetry Analysis"]?.["Horizontal Symmetry"] ===
+                          "number"
+                            ? result["Symmetry Analysis"]["Horizontal Symmetry"].toFixed(2)
+                            : "N/A"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Confidence Score
+                    </h3>
+                    <div className="text-xl font-bold text-blue-400">
+                      {(result["Confidence Score"] * 100).toFixed(1)}%
+                    </div>
                   </div>
                 </div>
-              </div> */}
-            </div>
+              </>
+            ) : isVideoResult(result) ? (
+              // Video Analysis Results
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Total Frames Analyzed
+                    </h3>
+                    <div className="text-xl font-bold text-blue-400">
+                      {result["Total Frames Analyzed"]}
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Fake Frames
+                    </h3>
+                    <div className="text-xl font-bold text-red-400">
+                      {result["Fake Frames"]}
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Real Frames
+                    </h3>
+                    <div className="text-xl font-bold text-green-400">
+                      {result["Real Frames"]}
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Fake Percentage
+                    </h3>
+                    <div className="text-xl font-bold text-purple-400">
+                      {result["Fake Percentage"].toFixed(2)}%
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3 text-gray-300">
+                      Confidence Score
+                    </h3>
+                    <div className="text-xl font-bold text-blue-400">
+                      {(result["Confidence Score"] * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                </div>
+
+                {/* Frame Analysis Bar Chart */}
+                <div className="mt-6 bg-gray-700 p-4 rounded-lg">
+                  <h3 className="text-lg font-medium mb-3 text-gray-300">
+                    Frame Analysis Distribution
+                  </h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div
+                      className="h-8 bg-red-500 rounded transition-all"
+                      style={{
+                        width: `${result["Fake Percentage"]}%`,
+                      }}
+                    ></div>
+                    <div
+                      className="h-8 bg-green-500 rounded transition-all"
+                      style={{
+                        width: `${100 - result["Fake Percentage"]}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-400">
+                    <span>Fake: {result["Fake Percentage"].toFixed(1)}%</span>
+                    <span>Real: {(100 - result["Fake Percentage"]).toFixed(1)}%</span>
+                  </div>
+                </div>
+              </>
+            ) : null}
 
             <div className="mt-8 p-4 bg-gray-700 rounded-lg">
               <h3 className="text-lg font-medium mb-3 text-gray-300">
@@ -390,7 +470,7 @@ const DeepFakeImageVideo = () => {
                       : "text-red-400"
                   }`}
                 >
-                  This {fileType} is {result["Final Prediction"].toLowerCase()}
+                  This {fileType} is {result["Final Prediction"]?.toLowerCase() || "unknown"}
                 </div>
               </div>
             </div>

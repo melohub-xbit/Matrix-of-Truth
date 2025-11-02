@@ -115,3 +115,4 @@ huggingface_hub>=0.16.0
 sentencepiece>=0.1.95
 matplotlib
 neo4j
+gunicorn==21.2.0

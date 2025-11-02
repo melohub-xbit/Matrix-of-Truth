@@ -9,11 +9,11 @@ from PIL import Image
 from typing import Dict, Any
 import sys
 
-# Add the parent directory to the path to import testing2
+# Add the parent directory to the path to import detector
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import functions from testing2
-from deepfake_detection.testing2 import combined_prediction, predict_video
+# Import functions from detector
+from backend_matrix.deepfake_detection.detector import combined_prediction, predict_video
 
 # Create router
 deepfake_router = APIRouter()

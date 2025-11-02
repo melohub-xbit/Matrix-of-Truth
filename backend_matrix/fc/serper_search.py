@@ -161,8 +161,7 @@ class CustomLogger:
         self.logger = logging.getLogger("FactCheck")
         self.logger.setLevel(loglevel)
         
-        if not os.path.exists("./log"):
-            os.makedirs("./log")
+        os.makedirs("./log", exist_ok=True)
             
         env = os.environ.get("env", "dev")
         fh = TimedRotatingFileHandler(filename="./log/factcheck_{}.log".format(env), when="D", encoding="utf-8")

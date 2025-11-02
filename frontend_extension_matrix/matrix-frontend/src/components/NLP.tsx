@@ -119,6 +119,8 @@ const NLP: React.FC = () => {
   const renderTruthScore = () => {
     if (!result) return null;
 
+    console.log(result);
+
     const isFake = result.detailed_analysis.is_fake;
     const scoreClass = isFake
       ? "bg-red-100 text-red-800"
